@@ -1,13 +1,25 @@
 const http = require('http');
-const url = require('url');
 
-const server = http.createServer((req, res)=> {
-    res.writeHead(200, {'Content-Type':'text/html'});
-    const quer = url.parse(req.url, true).query;
-    const txt = quer.year + " " + quer.month;
-    res.end(txt);
-});
+const server = http.createServer((req, res) =>{
 
-server.listen(8080, () =>{
-    console.log('The server is up and running')
+const url = req.url;
+const method = req.method;
+
+if(url === '/'){
+    res.write('<html>');
+    res.write('<head><title>Enter Message</title></head>');
+    res.write('<body><form actin="/message" method="POST"><input type="text" name="message"><button type="submit">send</button></form></body>');
+    res.write('</html>');
+    //console.log('server created');
+    return res.end();
+}
+if(url === '/message'  && method==='POST'){
+    const body=[];
+    req.on('data', (chunk) =>{
+        console.log(chunk);
+        body.push(chunk);
+    })
+}
+    
 });
+server.listen(3000)
